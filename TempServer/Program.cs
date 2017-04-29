@@ -35,7 +35,6 @@ namespace TempServer
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

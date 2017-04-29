@@ -34,6 +34,7 @@ namespace TempServer
 
                     //TODO: debug
                     string message = strBuild.ToString();
+                    Console.WriteLine(message);
                     message = message.Substring(message.IndexOf(':') + 1).Trim().ToUpper();
                     data = Encoding.Unicode.GetBytes(message);
                     stram.Write(data,0,data.Length);
@@ -42,6 +43,8 @@ namespace TempServer
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                
+                return;
             }
             finally
             {

@@ -51,12 +51,21 @@ namespace messengerKiller
 
         private void Login()
         {
-            client = new TcpClient(address, PORT);
-            stream = client.GetStream();
+            try
+            {
+                client = new TcpClient(address, PORT);
+                stream = client.GetStream();
 
-            listen = true;
-            Task reciveTask = new Task(Recive);
-            reciveTask.Start();
+                listen = true;
+                Task reciveTask = new Task(Recive);
+                reciveTask.Start();
+                chatTextBox.Text = "";
+            }
+            catch(Exception ex)
+            {
+                chatTextBox.Text += '\n'+ ex.Message;
+                Logout();
+            }
         }
 
         private void Logout()
@@ -68,19 +77,28 @@ namespace messengerKiller
 
         private void Recive()
         {
-            while (listen)
+            try
             {
-                byte[] data = new byte[64];
-                StringBuilder strBuild = new StringBuilder();
-                int bytes = 0;
-                do
+                while (listen)
                 {
-                    bytes = stream.Read(data, 0, data.Length);
-                    strBuild.Append(Encoding.Unicode.GetString(data, 0, bytes));
-                } while (stream.DataAvailable);
-                string message = "\n" + strBuild.ToString();
-                chatTextBox.Text += message;
-                
+                    byte[] data = new byte[64];
+                    StringBuilder strBuild = new StringBuilder();
+                    int bytes = 0;
+                    do
+                    {
+                        bytes = stream.Read(data, 0, data.Length);
+                        strBuild.Append(Encoding.Unicode.GetString(data, 0, bytes));
+                    } while (stream.DataAvailable);
+                    string message = "\n" + strBuild.ToString();
+                    chatTextBox.Text += message;
+
+                }
+            }
+            catch(Exception ex)
+            {
+                listen = false;
+                Logout();
+                chatTextBox.Text += ex.Message;
             }
             if (!listen)
             {
