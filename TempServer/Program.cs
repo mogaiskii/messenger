@@ -13,6 +13,8 @@ namespace TempServer
         const int PORT = 8010;
         static TcpListener listener;
 
+        static Queue<string> messages = new Queue<string>();
+
 
         static void Main(string[] args)
         {
@@ -27,6 +29,7 @@ namespace TempServer
                 {
                     TcpClient client = listener.AcceptTcpClient();
                     ClientObject clObject = new ClientObject(client);
+                    clObject.Recived += MessageRecived;
 
                     Thread clientThread = new Thread(new ThreadStart(clObject.Process));
                     clientThread.Start();
@@ -38,5 +41,11 @@ namespace TempServer
                 throw;
             }
         }
+
+        public static void MessageRecived(string message)
+        {
+            messages.Enqueue(message);
+        }
+
     }
 }

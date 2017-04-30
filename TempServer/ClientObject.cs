@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 
@@ -7,6 +8,12 @@ namespace TempServer
     class ClientObject
     {
         public TcpClient client;
+        NetworkStream stram = null;
+
+        Queue<string> messages = new Queue<string>();
+
+        public delegate void MessageReciver(string message);
+        public event MessageReciver Recived;
 
         public ClientObject(TcpClient tcpClient)
         {
@@ -15,7 +22,12 @@ namespace TempServer
 
         public void Process()
         {
-            NetworkStream stram = null;
+            Recive();
+        }
+
+
+        public void Recive()
+        {
             try
             {
                 stram = client.GetStream();
@@ -32,18 +44,16 @@ namespace TempServer
                         strBuild.Append(Encoding.Unicode.GetString(data, 0, bytes));
                     } while (stram.DataAvailable);
 
-                    //TODO: debug
+
                     string message = strBuild.ToString();
-                    Console.WriteLine(message);
-                    message = message.Substring(message.IndexOf(':') + 1).Trim().ToUpper();
-                    data = Encoding.Unicode.GetBytes(message);
-                    stram.Write(data,0,data.Length);
+                    Recived.Invoke(message);
+
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                
+
                 return;
             }
             finally
@@ -53,6 +63,11 @@ namespace TempServer
                 if (client != null)
                     client.Close();
             }
+        }
+
+        public void Send()
+        {
+
         }
 
     }
