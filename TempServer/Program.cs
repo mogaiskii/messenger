@@ -12,13 +12,18 @@ namespace TempServer
     {
         const int PORT = 8010;
         static TcpListener listener;
-        static object locker = new object();
+        static DBController DBcontr = new DBController("server", "port", "login", "password", "table");
         
         public delegate void Sender(string sent_from, string send_to, string message);
 
         static Dictionary<string, Sender> clients = new Dictionary<string, Sender>();
-        public static void AddClient(string username, Sender send_func)
+        public static bool AddClient(string username, string password, Sender send_func)
         {
+            if (!DBcontr.CheckAuth(username, password))
+            {
+                send_func("SERVER", username, "EXIT");
+                return false;
+            }
             if (!clients.ContainsKey(username))
             {
                 clients.Add(username, send_func);
@@ -27,8 +32,9 @@ namespace TempServer
             else
             {
                 RemoveClient(username);
-                AddClient(username, send_func);
+                AddClient(username, password, send_func);
             }
+            return true;
         }
 
         public static void AddRequest(string name_from, string name_to)
@@ -51,7 +57,6 @@ namespace TempServer
                 clients.Remove(username);
             }
         }
-
 
         static void Main(string[] args)
         {

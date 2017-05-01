@@ -59,14 +59,17 @@ namespace TempServer
                         {
                             case "AUTH":
                                 username = message.Substring(NAME_LEN + 4);
-                                Program.AddClient(username, Send);
+                                string password = username.Substring(username.LastIndexOf('%')+1);
+                                username = username.Substring(0,username.IndexOf('%'));
+
+                                if (!Program.AddClient(username, password, Send))
+                                    throw new Exception(username + " Denied");
                                 break;
                             case "ADD_":
                                 string name_to = message.Substring(NAME_LEN+4);
                                 Program.AddRequest(username, name_to);
                                 break;
                             case "EXIT":
-                                // username = null; //TODO: brea
                                 throw new Exception(username+" Disconnected");
                                 break;
                             default:
@@ -94,7 +97,8 @@ namespace TempServer
             }
             finally
             { 
-                Program.RemoveClient(username);
+                if(username!=null)
+                    Program.RemoveClient(username);
 
                 if (stram != null)
                     stram.Close();

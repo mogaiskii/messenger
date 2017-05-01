@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace messengerKiller
 {
@@ -40,8 +41,6 @@ namespace messengerKiller
                     && !nameTextBox.Text.Contains("%") && nameTextBox.Text[0]!=' '
                     && nameTextBox.Text != "SERVER" )
                 {
-                    
-
                     Login();
                 }
                 else
@@ -74,12 +73,16 @@ namespace messengerKiller
                 client = new TcpClient(address, PORT);
                 stream = client.GetStream();
 
+                string password = passwordTextBox.Text.GetHashCode().ToString();
+
                 listen = true;
                 Task reciveTask = new Task(Recive);
                 reciveTask.Start();
                 chatTextBox.Text = "";
 
-                Send("SERVER", "AUTH" + username);
+                Send("SERVER", "AUTH" + username+
+                    string.Concat(Enumerable.Range(0, (NAME_LEN - username.Length)).Select(i => "%"))+
+                    password);
             }
             catch(Exception ex)
             {
@@ -147,10 +150,18 @@ namespace messengerKiller
                         bytes = stream.Read(data, 0, data.Length);
                         strBuild.Append(Encoding.Unicode.GetString(data, 0, bytes));
                     } while (stream.DataAvailable);
-                    string message = "\n" + strBuild.ToString();
-                    ChatWriteDelegate del = delegate (string mes) { chatTextBox.Text += message; };
-                    chatTextBox.Invoke(del, message);
-                    //chatTextBox.Text += message;
+                    string message = strBuild.ToString();
+                    if (message.Substring(0, 6) != "SERVER")
+                    {
+                        message = "\n" + message;
+                        ChatWriteDelegate del = delegate (string mes) { chatTextBox.Text += message; };
+                        chatTextBox.Invoke(del, message);
+                        //chatTextBox.Text += message;
+                    }
+                    else
+                    {
+                        throw new Exception("Invalid password");
+                    }
 
                 }
             }
