@@ -59,10 +59,11 @@ namespace TempServer
                         {
                             case "AUTH":
                                 username = message.Substring(NAME_LEN + 4);
-                                Program.clients.Add(username, Send);
+                                Program.AddClient(username, Send);
                                 break;
                             case "EXIT":
-                                username = null; //TODO: brea
+                                // username = null; //TODO: brea
+                                throw new Exception(username+" Disconnected");
                                 break;
                             default:
                                 break;
@@ -82,19 +83,20 @@ namespace TempServer
             {
                 stram.Close();
                 client.Close();
-                Program.clients.Remove(username);
+                //Program.RemoveClient(username); //TODO: safety threads;
                 Console.WriteLine(ex.Message);
 
                 return;
             }
             finally
-            {
+            { 
+                Program.RemoveClient(username);
+
                 if (stram != null)
                     stram.Close();
                 if (client != null)
                     client.Close();
 
-                Program.clients.Remove(username);
             }
         }
 

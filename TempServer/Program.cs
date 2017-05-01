@@ -16,7 +16,28 @@ namespace TempServer
         
         public delegate void Sender(string sent_from, string send_to, string message);
 
-        public static Dictionary<string, Sender> clients = new Dictionary<string, Sender>();
+        static Dictionary<string, Sender> clients = new Dictionary<string, Sender>();
+        public static void AddClient(string username, Sender send_func)
+        {
+            if (!clients.ContainsKey(username))
+            {
+                clients.Add(username, send_func);
+                Console.WriteLine(username + " Connected");
+            }
+            else
+            {
+                RemoveClient(username);
+                AddClient(username, send_func);
+            }
+        }
+
+        public static void RemoveClient(string username)
+        {
+            if (clients.ContainsKey(username))
+            {
+                clients.Remove(username);
+            }
+        }
 
 
         static void Main(string[] args)
