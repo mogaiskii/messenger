@@ -31,6 +31,19 @@ namespace TempServer
             }
         }
 
+        public static void AddRequest(string name_from, string name_to)
+        {
+            if (clients.ContainsKey(name_to))  // TODO: not in clients, but in base
+            {
+                clients[name_to]("SERVER", name_to, "ADD_"+name_from);
+                clients[name_to](name_from, name_to, name_from + " добавил вас в друзья");
+            }
+            else
+            {
+                clients[name_from]("SERVER", name_from, name_to + " offline");
+            }
+        }
+
         public static void RemoveClient(string username)
         {
             if (clients.ContainsKey(username))

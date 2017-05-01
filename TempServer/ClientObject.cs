@@ -61,6 +61,10 @@ namespace TempServer
                                 username = message.Substring(NAME_LEN + 4);
                                 Program.AddClient(username, Send);
                                 break;
+                            case "ADD_":
+                                string name_to = message.Substring(NAME_LEN+4);
+                                Program.AddRequest(username, name_to);
+                                break;
                             case "EXIT":
                                 // username = null; //TODO: brea
                                 throw new Exception(username+" Disconnected");

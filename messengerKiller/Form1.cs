@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace messengerKiller
 {
@@ -22,6 +23,7 @@ namespace messengerKiller
         delegate void ChangeGuiDelegate();
 
         string username = "";
+        Dictionary<string, Queue<string>> friends = new Dictionary<string, Queue<string>>();
 
         public Form1()
         {
@@ -60,7 +62,10 @@ namespace messengerKiller
             username = nameTextBox.Text;
             nameTextBox.ReadOnly = true;
             nameTextBox.Enabled = false;
+            passwordTextBox.ReadOnly = true;
+            passwordTextBox.Enabled = false;
             sendButton.Enabled = true;
+            registerButton.Enabled = false;
             loginButton.Text = "Logout";
             chatTextBox.BackColor = System.Drawing.Color.LightGreen;
             
@@ -106,7 +111,10 @@ namespace messengerKiller
                 {
                     nameTextBox.ReadOnly = false;
                     nameTextBox.Enabled = true;
+                    passwordTextBox.ReadOnly = false;
+                    passwordTextBox.Enabled = true;
                     sendButton.Enabled = false;
+                    registerButton.Enabled = true;
                     loginButton.Text = "Login";
                     chatTextBox.BackColor = System.Drawing.Color.LightGreen;
                 };
@@ -116,7 +124,10 @@ namespace messengerKiller
             {
                 nameTextBox.ReadOnly = false;
                 nameTextBox.Enabled = true;
+                passwordTextBox.ReadOnly = false;
+                passwordTextBox.Enabled = true;
                 sendButton.Enabled = false;
+                registerButton.Enabled = true;
                 loginButton.Text = "Login";
                 chatTextBox.BackColor = System.Drawing.Color.LightGreen;
             }
@@ -191,5 +202,23 @@ namespace messengerKiller
             }
             messageBox.Text = "";
         }
+
+        private void friendAddButton_Click(object sender, EventArgs e)
+        {
+            string name = friendTextBox.Text;
+            if(name.Length > 0 && name.Length <= 32 && name != "SERVER")
+            {
+                friendsList.Items.Add(name);
+                friends.Add(username, new Queue<string>());
+                Send("SERVER", "ADD_"+name);
+            }
+        }
+
+        private void friendsList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
     }
 }
