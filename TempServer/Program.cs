@@ -12,8 +12,11 @@ namespace TempServer
     {
         const int PORT = 8010;
         static TcpListener listener;
+        static object locker = new object();
+        
+        public delegate void Sender(string sent_from, string send_to, string message);
 
-        static Queue<string> messages = new Queue<string>();
+        public static Dictionary<string, Sender> clients = new Dictionary<string, Sender>();
 
 
         static void Main(string[] args)
@@ -42,9 +45,17 @@ namespace TempServer
             }
         }
 
-        public static void MessageRecived(string message)
+        public static void MessageRecived(string sent_from, string send_to, string message)
         {
-            messages.Enqueue(message);
+            if (clients.ContainsKey(send_to))
+            {
+                clients[sent_from](sent_from, send_to, message);
+                clients[send_to](sent_from, send_to, message);
+            }
+            else
+            {
+                clients[sent_from](sent_from, send_to, "Вне сети");
+            }
         }
 
     }

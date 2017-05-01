@@ -34,6 +34,7 @@
             this.chatTextBox = new System.Windows.Forms.RichTextBox();
             this.messageBox = new System.Windows.Forms.RichTextBox();
             this.sendButton = new System.Windows.Forms.Button();
+            this.friendsList = new System.Windows.Forms.ListView();
             this.SuspendLayout();
             // 
             // nameLabel
@@ -65,8 +66,7 @@
             // 
             // chatTextBox
             // 
-            this.chatTextBox.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.chatTextBox.Enabled = false;
+            this.chatTextBox.BackColor = System.Drawing.Color.LightGreen;
             this.chatTextBox.Location = new System.Drawing.Point(15, 72);
             this.chatTextBox.Name = "chatTextBox";
             this.chatTextBox.ReadOnly = true;
@@ -95,11 +95,20 @@
             this.sendButton.UseVisualStyleBackColor = true;
             this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
             // 
+            // friendsList
+            // 
+            this.friendsList.Location = new System.Drawing.Point(429, 39);
+            this.friendsList.Name = "friendsList";
+            this.friendsList.Size = new System.Drawing.Size(163, 284);
+            this.friendsList.TabIndex = 6;
+            this.friendsList.UseCompatibleStateImageBehavior = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(604, 396);
+            this.Controls.Add(this.friendsList);
             this.Controls.Add(this.sendButton);
             this.Controls.Add(this.messageBox);
             this.Controls.Add(this.chatTextBox);
@@ -107,7 +116,7 @@
             this.Controls.Add(this.nameTextBox);
             this.Controls.Add(this.nameLabel);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Messenger";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_Closing);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -122,6 +131,7 @@
         private System.Windows.Forms.RichTextBox chatTextBox;
         private System.Windows.Forms.RichTextBox messageBox;
         private System.Windows.Forms.Button sendButton;
+        private System.Windows.Forms.ListView friendsList;
     }
 }
 
