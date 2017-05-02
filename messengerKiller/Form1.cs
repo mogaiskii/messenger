@@ -24,6 +24,7 @@ namespace messengerKiller
         delegate void ChangeGuiDelegate();
 
         string username = "";
+        string token = null;
         Dictionary<string, Queue<string>> friends = new Dictionary<string, Queue<string>>();
 
         public Form1()
@@ -160,9 +161,21 @@ namespace messengerKiller
                     }
                     else
                     {
-                        throw new Exception("Invalid password");
+                        switch (message.Substring(6, 4))
+                        {
+                            case "AUTH":
+                                token = message.Substring(10, message.Length - 10);
+                                break;
+                            case "EXIT":
+                                throw new Exception("Invalid password");
+                                break;
+                            case "NADD":
+                                string off_user = message.Substring(10, message.Length - 10);
+                                ChatWriteDelegate del = delegate (string user) { chatTextBox.Text += user+" offline"; };
+                                chatTextBox.Invoke(del, off_user);
+                                break;
+                        }
                     }
-
                 }
             }
             catch(Exception ex)

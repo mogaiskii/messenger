@@ -46,7 +46,7 @@ namespace TempServer
             }
             else
             {
-                clients[name_from]("SERVER", name_from, name_to + " offline");
+                clients[name_from]("SERVER", name_from, "NADD"+name_to);
             }
         }
 

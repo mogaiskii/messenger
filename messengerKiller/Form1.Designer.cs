@@ -34,13 +34,13 @@
             this.chatTextBox = new System.Windows.Forms.RichTextBox();
             this.messageBox = new System.Windows.Forms.RichTextBox();
             this.sendButton = new System.Windows.Forms.Button();
-            this.friendsList = new System.Windows.Forms.ListView();
             this.FriendLabel = new System.Windows.Forms.Label();
             this.friendTextBox = new System.Windows.Forms.TextBox();
             this.friendAddButton = new System.Windows.Forms.Button();
             this.passwordLabel = new System.Windows.Forms.Label();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.registerButton = new System.Windows.Forms.Button();
+            this.friendsList = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // nameLabel
@@ -101,15 +101,6 @@
             this.sendButton.UseVisualStyleBackColor = true;
             this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
             // 
-            // friendsList
-            // 
-            this.friendsList.Location = new System.Drawing.Point(429, 39);
-            this.friendsList.Name = "friendsList";
-            this.friendsList.Size = new System.Drawing.Size(163, 284);
-            this.friendsList.TabIndex = 6;
-            this.friendsList.UseCompatibleStateImageBehavior = false;
-            this.friendsList.SelectedIndexChanged += new System.EventHandler(this.friendsList_SelectedIndexChanged);
-            // 
             // FriendLabel
             // 
             this.FriendLabel.AutoSize = true;
@@ -162,18 +153,26 @@
             this.registerButton.Text = "Register";
             this.registerButton.UseVisualStyleBackColor = true;
             // 
+            // friendsList
+            // 
+            this.friendsList.FormattingEnabled = true;
+            this.friendsList.Location = new System.Drawing.Point(429, 15);
+            this.friendsList.Name = "friendsList";
+            this.friendsList.Size = new System.Drawing.Size(163, 303);
+            this.friendsList.TabIndex = 13;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(604, 396);
+            this.Controls.Add(this.friendsList);
             this.Controls.Add(this.registerButton);
             this.Controls.Add(this.passwordTextBox);
             this.Controls.Add(this.passwordLabel);
             this.Controls.Add(this.friendAddButton);
             this.Controls.Add(this.friendTextBox);
             this.Controls.Add(this.FriendLabel);
-            this.Controls.Add(this.friendsList);
             this.Controls.Add(this.sendButton);
             this.Controls.Add(this.messageBox);
             this.Controls.Add(this.chatTextBox);
@@ -196,13 +195,13 @@
         private System.Windows.Forms.RichTextBox chatTextBox;
         private System.Windows.Forms.RichTextBox messageBox;
         private System.Windows.Forms.Button sendButton;
-        private System.Windows.Forms.ListView friendsList;
         private System.Windows.Forms.Label FriendLabel;
         private System.Windows.Forms.TextBox friendTextBox;
         private System.Windows.Forms.Button friendAddButton;
         private System.Windows.Forms.Label passwordLabel;
         private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.Button registerButton;
+        private System.Windows.Forms.ListBox friendsList;
     }
 }
 
