@@ -68,7 +68,9 @@ namespace messengerKiller
             registerButton.Enabled = false;
             loginButton.Text = "Logout";
             chatTextBox.BackColor = System.Drawing.Color.LightGreen;
-            
+            //TODO: try to load friends
+            friendAddButton.Enabled = true;
+
             try
             {
                 client = new TcpClient(address, PORT);
@@ -121,6 +123,8 @@ namespace messengerKiller
                     registerButton.Enabled = true;
                     loginButton.Text = "Login";
                     chatTextBox.BackColor = System.Drawing.Color.LightGreen;
+                    friendsList.Items.Clear();
+                    friendAddButton.Enabled = false;
                 };
                 nameTextBox.Invoke(del);
             }
@@ -134,6 +138,8 @@ namespace messengerKiller
                 registerButton.Enabled = true;
                 loginButton.Text = "Login";
                 chatTextBox.BackColor = System.Drawing.Color.LightGreen;
+                friendsList.Items.Clear();
+                friendAddButton.Enabled = false;
             }
         }
 
@@ -168,6 +174,16 @@ namespace messengerKiller
                                 break;
                             case "EXIT":
                                 throw new Exception("Invalid password");
+                                break;
+                            case "ADD_":
+                                string friend = message.Substring(10);
+                                ChangeGuiDelegate friend_del = delegate ()
+                                {
+                                    addFriend(friend);
+                                    friendsList.ClearSelected();
+                                    friendsList.SetSelected(friendsList.Items.Count - 1, true);
+                                };
+                                friendsList.Invoke(friend_del);
                                 break;
                             case "NADD":
                                 string off_user = message.Substring(10, message.Length - 10);
@@ -210,12 +226,11 @@ namespace messengerKiller
         private void sendButton_Click(object sender, EventArgs e)
         {
             string message = messageBox.Text;
-
-            string send_to = message.Substring(1, message.IndexOf('%',1));
+            
+            string send_to = friendsList.SelectedItem.ToString();
 
             message = message.Substring(message.IndexOf('%',1)+1);
 
-            //////
             try
             {
                 Send(send_to, message);
@@ -230,12 +245,17 @@ namespace messengerKiller
         private void friendAddButton_Click(object sender, EventArgs e)
         {
             string name = friendTextBox.Text;
-            if(name.Length > 0 && name.Length <= 32 && name != "SERVER")
+            if(name.Length > 0 && name.Length <= 32 && name != "SERVER" && name != username) // TODO: &&name!=username
             {
-                friendsList.Items.Add(name);
-                friends.Add(username, new Queue<string>());
-                Send("SERVER", "ADD_"+name);
+                addFriend(name);
+                Send("SERVER", "ADD_" + name);
             }
+        }
+
+        private void addFriend(string name)
+        {
+            friendsList.Items.Add(name);
+            friends.Add(username, new Queue<string>());
         }
 
         private void friendsList_SelectedIndexChanged(object sender, EventArgs e)

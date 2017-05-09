@@ -1,22 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
+using MySql.Data.MySqlClient;
 
 namespace TempServer
 {
     class DBController
     {
-        public DBController(string server, string port, string login, string password, string table)
-        {
+        string connect_line;
 
+        public DBController(string d_base, string host, string user_id, string password)
+        {
+            connect_line = "Database="+d_base+";Data Source="+host+
+                ";User Id="+user_id+";Password="+password;
+            connect_line = "server="+host+";uid="+user_id+";" +
+                        "pwd="+password+";database="+d_base+";";
         }
+        
+
         public bool CheckAuth(string username, string passwordHash)
         {
+
+            MySqlConnection connection = new MySqlConnection(connect_line);
+            connection.Open();
             //TODO: debug
-            
-            return username.GetHashCode().ToString() == passwordHash;
+            string verify_command_text = "SELECT password FROM users WHERE username='" + username+ "'";
+            MySqlCommand command = new MySqlCommand(verify_command_text, connection);
+            MySqlDataReader passwordReader = command.ExecuteReader();
+            //if (!passwordReader.Read()) string;
+            passwordReader.Read();
+
+            string password = passwordReader.GetString(0);
+
+            connection.Close();
+            return password.GetHashCode().ToString() == passwordHash;
         }
     }
 }

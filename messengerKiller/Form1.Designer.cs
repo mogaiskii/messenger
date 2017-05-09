@@ -65,7 +65,7 @@
             this.loginButton.Location = new System.Drawing.Point(339, 12);
             this.loginButton.Name = "loginButton";
             this.loginButton.Size = new System.Drawing.Size(75, 20);
-            this.loginButton.TabIndex = 5;
+            this.loginButton.TabIndex = 3;
             this.loginButton.Text = "Login";
             this.loginButton.UseVisualStyleBackColor = true;
             this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
@@ -78,7 +78,7 @@
             this.chatTextBox.ReadOnly = true;
             this.chatTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.chatTextBox.Size = new System.Drawing.Size(399, 251);
-            this.chatTextBox.TabIndex = 3;
+            this.chatTextBox.TabIndex = 7;
             this.chatTextBox.Text = "";
             // 
             // messageBox
@@ -87,7 +87,7 @@
             this.messageBox.Name = "messageBox";
             this.messageBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.messageBox.Size = new System.Drawing.Size(318, 54);
-            this.messageBox.TabIndex = 1;
+            this.messageBox.TabIndex = 5;
             this.messageBox.Text = "";
             // 
             // sendButton
@@ -96,7 +96,7 @@
             this.sendButton.Location = new System.Drawing.Point(338, 330);
             this.sendButton.Name = "sendButton";
             this.sendButton.Size = new System.Drawing.Size(75, 54);
-            this.sendButton.TabIndex = 2;
+            this.sendButton.TabIndex = 6;
             this.sendButton.Text = "Send";
             this.sendButton.UseVisualStyleBackColor = true;
             this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
@@ -119,6 +119,7 @@
             // 
             // friendAddButton
             // 
+            this.friendAddButton.Enabled = false;
             this.friendAddButton.Location = new System.Drawing.Point(429, 360);
             this.friendAddButton.Name = "friendAddButton";
             this.friendAddButton.Size = new System.Drawing.Size(163, 23);
@@ -142,14 +143,14 @@
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.PasswordChar = '-';
             this.passwordTextBox.Size = new System.Drawing.Size(134, 20);
-            this.passwordTextBox.TabIndex = 11;
+            this.passwordTextBox.TabIndex = 2;
             // 
             // registerButton
             // 
             this.registerButton.Location = new System.Drawing.Point(338, 37);
             this.registerButton.Name = "registerButton";
             this.registerButton.Size = new System.Drawing.Size(75, 23);
-            this.registerButton.TabIndex = 12;
+            this.registerButton.TabIndex = 4;
             this.registerButton.Text = "Register";
             this.registerButton.UseVisualStyleBackColor = true;
             // 
@@ -159,7 +160,7 @@
             this.friendsList.Location = new System.Drawing.Point(429, 15);
             this.friendsList.Name = "friendsList";
             this.friendsList.Size = new System.Drawing.Size(163, 303);
-            this.friendsList.TabIndex = 13;
+            this.friendsList.TabIndex = 10;
             // 
             // Form1
             // 

@@ -113,7 +113,17 @@ namespace TempServer
             if (username != null)
             {
                 byte[] data = new byte[64];
-                data = Encoding.Unicode.GetBytes(sent_from+"^:"+message);
+                if(sent_from!="SERVER")
+                    data = Encoding.Unicode.GetBytes(sent_from+"^:"+message);
+                else
+                    data = Encoding.Unicode.GetBytes(sent_from + message);
+                if (data.Length < 64)
+                {
+                    byte[] ndata = new byte[64];
+                    ndata.Initialize();
+                    data.CopyTo(ndata, 0);
+                    data = ndata;
+                }
                 stram.Write(data, 0, data.Length);
             }
         }
