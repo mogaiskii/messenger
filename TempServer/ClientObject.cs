@@ -72,6 +72,20 @@ namespace TempServer
                             case "EXIT":
                                 throw new Exception(username+" Disconnected");
                                 break;
+                            case "REG_":
+                                string t_username = message.Substring(NAME_LEN + 4,NAME_LEN);
+                                string t_password = message.Substring(NAME_LEN + 4 + NAME_LEN);
+                                if(Program.RegistrationRequest(t_username, t_password))
+                                {
+                                    Send("SERVER", t_username, "REG_FINE");
+                                    throw new Exception(username + " Registred");
+                                }
+                                else
+                                {
+                                    Send("SERVER", t_username, "REG_BAD");
+                                    throw new Exception(username + " not registred");
+                                }
+                                break;
                             default:
                                 break;
                         }

@@ -143,6 +143,49 @@ namespace messengerKiller
             }
         }
 
+        private void registerButton_Click(object sender, EventArgs e)
+        {
+            if (username.Length == 0)
+            {
+                if (nameTextBox.Text.Length <= NAME_LEN && nameTextBox.Text.Length > 0
+                    && !nameTextBox.Text.Contains("%") && nameTextBox.Text[0] != ' '
+                    && nameTextBox.Text != "SERVER")
+                {
+                    Register();
+                }
+                else
+                {
+                    chatTextBox.Text += "\n!-- Name is incorrect !\nRegistration failed";
+                }
+            }
+        }
+
+        private void Register()
+        {
+            try
+            {
+                client = new TcpClient(address, PORT);
+                stream = client.GetStream();
+
+                username = nameTextBox.Text;
+                string password = passwordTextBox.Text.GetHashCode().ToString();
+
+                listen = true;
+                Task reciveTask = new Task(Recive);
+                reciveTask.Start();
+                chatTextBox.Text = "";
+
+                Send("SERVER", "REG_" + username +
+                    string.Concat(Enumerable.Range(0, (NAME_LEN - username.Length)).Select(i => "%")) +
+                    password);
+            }
+            catch (Exception ex)
+            {
+                chatTextBox.Text += '\n' + ex.Message;
+                Logout();
+            }
+        }
+
         private void Recive()
         {
             try
@@ -189,6 +232,19 @@ namespace messengerKiller
                                 string off_user = message.Substring(10, message.Length - 10);
                                 ChatWriteDelegate del = delegate (string user) { chatTextBox.Text += user+" offline"; };
                                 chatTextBox.Invoke(del, off_user);
+                                break;
+                            case "REG_":
+                                if (message.Substring(10).Contains("FINE"))
+                                {
+                                    ChatWriteDelegate rega = delegate (string user) { chatTextBox.Text = "Registraion successful!"; };
+                                    chatTextBox.Invoke(rega);
+                                }
+                                else
+                                {
+                                    ChatWriteDelegate not_rega = delegate (string user) { chatTextBox.Text = "Registraion failed!"; };
+                                    chatTextBox.Invoke(not_rega);
+                                }
+                                throw new Exception();
                                 break;
                         }
                     }
@@ -262,7 +318,6 @@ namespace messengerKiller
         {
 
         }
-
 
     }
 }

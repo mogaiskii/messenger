@@ -13,10 +13,7 @@ namespace TempServer
         const int PORT = 8010;
         static TcpListener listener;
         //                                              d_base,  host,  user_id,  password
-        static DBController DBcontr = new DBController("main",
-            "192.168.1.34",
-            "app",
-            "app");
+        static DBController DBcontr = new DBController("main", "localhost", "app", "app");
         
         public delegate void Sender(string sent_from, string send_to, string message);
 
@@ -52,6 +49,13 @@ namespace TempServer
             {
                 clients[name_from]("SERVER", name_from, "NADD"+name_to);
             }
+        }
+
+        public static bool RegistrationRequest(string username, string passwordHash)
+        {
+            if(username.Contains('%'))
+                username = username.Substring(0, username.IndexOf('%'));
+            return DBcontr.TryRegister(username, passwordHash);
         }
 
         public static void RemoveClient(string username)
