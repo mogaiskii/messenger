@@ -13,7 +13,7 @@ namespace TempServer
         const int PORT = 8010;
         static TcpListener listener;
         //                                              d_base,  host,  user_id,  password
-        static DBController DBcontr = new DBController("main", "localhost", "app", "app");
+        static DBController DBcontr = new DBController("main", "localhost", "root", "");
         
         public delegate void Sender(string sent_from, string send_to, string message);
 

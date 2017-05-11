@@ -33,13 +33,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="mysql.data">
+    <Reference Include="mysql.data, Version=5.2.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\Mysql\mysql.data.dll</HintPath>
     </Reference>
-    <Reference Include="mysql.visualstudio">
+    <Reference Include="mysql.visualstudio, Version=5.2.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\Mysql\mysql.visualstudio.dll</HintPath>
     </Reference>
-    <Reference Include="mysql.web">
+    <Reference Include="mysql.web, Version=5.2.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\Mysql\mysql.web.dll</HintPath>
     </Reference>
     <Reference Include="System" />

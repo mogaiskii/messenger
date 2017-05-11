@@ -1,6 +1,7 @@
 ﻿
 
 using MySql.Data.MySqlClient;
+using System;
 
 namespace TempServer
 {
@@ -11,12 +12,19 @@ namespace TempServer
 
         public DBController(string d_base, string host, string user_id, string password)
         {
-            
+            // TODO: Read from config file
             string connect_line = "server="+host+";uid="+user_id+";" +
                         "pwd="+password+";database="+d_base+";";
 
             connection = new MySqlConnection(connect_line);
-            connection.Open();
+            try {
+                connection.Open();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
 
         ~DBController()

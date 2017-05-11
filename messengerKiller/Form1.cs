@@ -203,10 +203,15 @@ namespace messengerKiller
                     string message = strBuild.ToString();
                     if (message.Substring(0, 6) != "SERVER")
                     {
+                        username = message.Substring(0, message.IndexOf("^"));
                         message = "\n" + message;
-                        ChatWriteDelegate del = delegate (string mes) { chatTextBox.Text += message; };
-                        chatTextBox.Invoke(del, message);
-                        //chatTextBox.Text += message;
+                        //ChatWriteDelegate del = delegate (string mes) { chatTextBox.Text += message; };
+                        //chatTextBox.Invoke(del, message);
+                        friends[username].Enqueue(message);
+                        //TODO:срочно
+                        //TODO:срочно
+                        //TODO:срочно
+                        //TODO: event при сообщении
                     }
                     else
                     {
@@ -236,15 +241,14 @@ namespace messengerKiller
                             case "REG_":
                                 if (message.Substring(10).Contains("FINE"))
                                 {
-                                    ChatWriteDelegate rega = delegate (string user) { chatTextBox.Text = "Registraion successful!"; };
-                                    chatTextBox.Invoke(rega);
+                                    throw new Exception("\n\nRegistraion successful!\n\n");
+                                    //ChatWriteDelegate rega = delegate (string text) { chatTextBox.Text = "\n\nRegistraion successful!\n\n"; };
+                                    //chatTextBox.Invoke(rega,"");
                                 }
                                 else
                                 {
-                                    ChatWriteDelegate not_rega = delegate (string user) { chatTextBox.Text = "Registraion failed!"; };
-                                    chatTextBox.Invoke(not_rega);
+                                    throw new Exception("Registraion failed!\n");
                                 }
-                                throw new Exception();
                                 break;
                         }
                     }

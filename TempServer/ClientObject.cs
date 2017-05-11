@@ -63,14 +63,14 @@ namespace TempServer
                                 username = username.Substring(0,username.IndexOf('%'));
 
                                 if (!Program.AddClient(username, password, Send))
-                                    throw new Exception(username + " Denied");
+                                    throw new Exception(username+"@"+ client.Client.RemoteEndPoint.ToString() + " Denied");
                                 break;
                             case "ADD_":
                                 string name_to = message.Substring(NAME_LEN+4);
                                 Program.AddRequest(username, name_to);
                                 break;
                             case "EXIT":
-                                throw new Exception(username+" Disconnected");
+                                throw new Exception(username + "@" + client.Client.RemoteEndPoint.ToString() + " Disconnected");
                                 break;
                             case "REG_":
                                 string t_username = message.Substring(NAME_LEN + 4,NAME_LEN);
@@ -124,7 +124,7 @@ namespace TempServer
 
         public void Send(string sent_from, string send_to, string message)
         {
-            if (username != null)
+            if (username != null || sent_from=="SERVER")
             {
                 byte[] data = new byte[64];
                 if(sent_from!="SERVER")
