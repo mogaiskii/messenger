@@ -1,8 +1,8 @@
 import socket
 import threading
 
-from true_server.client_object import ClientObject
-from true_server.DBcontroller import DBcontroller
+from client_object import ClientObject
+from DBcontroller import DBcontroller
 
 
 class Server:

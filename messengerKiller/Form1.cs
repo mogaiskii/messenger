@@ -22,6 +22,7 @@ namespace messengerKiller
         bool listen = false;
         delegate void ChatWriteDelegate(string message);
         delegate void ChangeGuiDelegate();
+        delegate string GetSelectedFriend();
 
         string username = "";
         string token = null;
@@ -30,12 +31,12 @@ namespace messengerKiller
         public Form1()
         {
             InitializeComponent();
-
            
         }
 
         private void loginButton_Click(object sender, EventArgs e)
         {
+            notice.ShowBalloonTip(2000, "Messenger", "Hello! I'm here!", ToolTipIcon.Info);
             if (username.Length == 0)
             {
                 if (nameTextBox.Text.Length <= NAME_LEN && nameTextBox.Text.Length > 0
@@ -111,7 +112,7 @@ namespace messengerKiller
                 stream.Close();
 
             username = "";
-            if (nameTextBox.InvokeRequired)
+            if (nameTextBox.InvokeRequired) //TODO: make a function from this
             {
                 ChangeGuiDelegate del = delegate ()
                 {
@@ -123,6 +124,7 @@ namespace messengerKiller
                     registerButton.Enabled = true;
                     loginButton.Text = "Login";
                     chatTextBox.BackColor = System.Drawing.Color.LightGreen;
+                    friends.Clear();
                     friendsList.Items.Clear();
                     friendAddButton.Enabled = false;
                 };
@@ -138,6 +140,7 @@ namespace messengerKiller
                 registerButton.Enabled = true;
                 loginButton.Text = "Login";
                 chatTextBox.BackColor = System.Drawing.Color.LightGreen;
+                friends.Clear();
                 friendsList.Items.Clear();
                 friendAddButton.Enabled = false;
             }
@@ -203,15 +206,71 @@ namespace messengerKiller
                     string message = strBuild.ToString();
                     if (message.Substring(0, 6) != "SERVER")
                     {
-                        username = message.Substring(0, message.IndexOf("^"));
-                        message = "\n" + message;
-                        //ChatWriteDelegate del = delegate (string mes) { chatTextBox.Text += message; };
-                        //chatTextBox.Invoke(del, message);
-                        friends[username].Enqueue(message);
-                        //TODO:срочно
-                        //TODO:срочно
-                        //TODO:срочно
-                        //TODO: event при сообщении
+                        string sender_username = message.Substring(0, message.IndexOf("^"));
+                        string reciver_username = message.Substring(message.IndexOf("^") + 1,
+                            message.IndexOf(":") - message.IndexOf("^") - 1);
+
+                        message = "\n" + sender_username + "^:" + message.Substring(message.IndexOf(":"));
+                        
+                        if (sender_username != username)
+                        {
+                            //TODO: actually, it shouldn't happen.. let me thing about it..
+                            ChangeGuiDelegate gui_del = delegate ()
+                            {
+                                if (!friends.ContainsKey(sender_username))
+                                {
+                                    friends.Add(sender_username, new Queue<string>());
+                                }
+                                friends[sender_username].Enqueue(message);
+                            };
+                            friendsList.Invoke(gui_del);
+
+                            GetSelectedFriend friendDel = delegate ()
+                            {
+                                if(friendsList.SelectedItem == null)
+                                {
+                                    return "";
+                                }
+                                return friendsList.SelectedItem.ToString();
+                            };
+
+                            string selectedFriend = friendsList.Invoke(friendDel).ToString();
+                            
+                            if(selectedFriend == sender_username)
+                            {
+                                ChatWriteDelegate del = delegate (string mes) { chatTextBox.Text += message; };
+                                chatTextBox.Invoke(del, message);
+                            }
+                            else
+                            {
+                                message = message.Substring(message.IndexOf(":"));
+                                if(message.Length > 20)
+                                {
+                                    message = message.Substring(0, 18) + "..";
+                                }
+                                ChangeGuiDelegate notice_del = delegate ()
+                                { 
+                                    notice.ShowBalloonTip(4000, sender_username, message, ToolTipIcon.Info);
+                                };
+                                chatTextBox.Invoke(notice_del);
+                            }
+                        }
+                        else
+                        {
+                            ChangeGuiDelegate message_del = delegate ()
+                            {
+                                if (friends.ContainsKey(reciver_username))
+                                {
+                                    friends[reciver_username].Enqueue(message);
+                                }
+                                if (friendsList.SelectedItem.ToString() == reciver_username)
+                                {
+                                    chatTextBox.Text += message;
+                                }
+                            };
+                            chatTextBox.Invoke(message_del);
+                        }
+                        
                     }
                     else
                     {
@@ -225,11 +284,13 @@ namespace messengerKiller
                                 break;
                             case "ADD_":
                                 string friend = message.Substring(10);
+                                if (friend.IndexOf('\0') != -1)
+                                {
+                                    friend = friend.Substring(0, friend.IndexOf('\0'));
+                                }
                                 ChangeGuiDelegate friend_del = delegate ()
                                 {
                                     addFriend(friend);
-                                    friendsList.ClearSelected();
-                                    friendsList.SetSelected(friendsList.Items.Count - 1, true);
                                 };
                                 friendsList.Invoke(friend_del);
                                 break;
@@ -267,6 +328,26 @@ namespace messengerKiller
             }
         }
 
+        private void sendButton_Click(object sender, EventArgs e)
+        {
+            string message = messageBox.Text;
+
+            string send_to = friendsList.SelectedItem.ToString();
+
+            message = message.Substring(message.IndexOf('%', 1) + 1);
+
+            try
+            {
+                Send(send_to, message);
+            }
+            catch (Exception ex)
+            {
+                chatTextBox.Text += "\n" + ex.Message;
+            }
+            messageBox.Text = "";
+            chatTextBox.ScrollToCaret();
+        }
+
         private void Send(string send_to, string message)
         {
             if (send_to.Length < NAME_LEN)
@@ -278,30 +359,6 @@ namespace messengerKiller
             stream.Write(data, 0, data.Length);
         }
 
-        private void Form1_Closing(object sender, EventArgs e)
-        { 
-            Logout();
-        }
-
-        private void sendButton_Click(object sender, EventArgs e)
-        {
-            string message = messageBox.Text;
-            
-            string send_to = friendsList.SelectedItem.ToString();
-
-            message = message.Substring(message.IndexOf('%',1)+1);
-
-            try
-            {
-                Send(send_to, message);
-            }
-            catch(Exception ex)
-            {
-                chatTextBox.Text += "\n" + ex.Message;
-            }
-            messageBox.Text = "";
-        }
-
         private void friendAddButton_Click(object sender, EventArgs e)
         {
             string name = friendTextBox.Text;
@@ -310,17 +367,30 @@ namespace messengerKiller
                 addFriend(name);
                 Send("SERVER", "ADD_" + name);
             }
+            friendTextBox.Text = "";
         }
 
         private void addFriend(string name)
         {
             friendsList.Items.Add(name);
-            friends.Add(username, new Queue<string>());
+            friends.Add(name, new Queue<string>());
         }
 
         private void friendsList_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            chatTextBox.Clear();
+            string friend_name = friendsList.SelectedItem.ToString();
+            Queue<string> messagesQueue = friends[friend_name];
+            foreach (var message in messagesQueue)
+            {
+                chatTextBox.Text += message;
+            }
+            chatTextBox.ScrollToCaret();
+        }
+        
+        private void Form1_Closing(object sender, EventArgs e)
+        {
+            Logout();
         }
 
     }

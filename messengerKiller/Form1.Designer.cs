@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.nameLabel = new System.Windows.Forms.Label();
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.loginButton = new System.Windows.Forms.Button();
@@ -41,6 +43,7 @@
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.registerButton = new System.Windows.Forms.Button();
             this.friendsList = new System.Windows.Forms.ListBox();
+            this.notice = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
             // 
             // nameLabel
@@ -54,11 +57,11 @@
             // 
             // nameTextBox
             // 
+            this.nameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.nameTextBox.Location = new System.Drawing.Point(116, 12);
             this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(134, 20);
+            this.nameTextBox.Size = new System.Drawing.Size(134, 23);
             this.nameTextBox.TabIndex = 1;
-            this.nameTextBox.Text = "Noname";
             // 
             // loginButton
             // 
@@ -73,6 +76,7 @@
             // chatTextBox
             // 
             this.chatTextBox.BackColor = System.Drawing.Color.LightGreen;
+            this.chatTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.chatTextBox.Location = new System.Drawing.Point(15, 72);
             this.chatTextBox.Name = "chatTextBox";
             this.chatTextBox.ReadOnly = true;
@@ -83,6 +87,7 @@
             // 
             // messageBox
             // 
+            this.messageBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.messageBox.Location = new System.Drawing.Point(13, 330);
             this.messageBox.Name = "messageBox";
             this.messageBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
@@ -104,7 +109,7 @@
             // FriendLabel
             // 
             this.FriendLabel.AutoSize = true;
-            this.FriendLabel.Location = new System.Drawing.Point(435, 326);
+            this.FriendLabel.Location = new System.Drawing.Point(426, 321);
             this.FriendLabel.Name = "FriendLabel";
             this.FriendLabel.Size = new System.Drawing.Size(106, 13);
             this.FriendLabel.TabIndex = 7;
@@ -112,15 +117,16 @@
             // 
             // friendTextBox
             // 
-            this.friendTextBox.Location = new System.Drawing.Point(429, 342);
+            this.friendTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.friendTextBox.Location = new System.Drawing.Point(429, 337);
             this.friendTextBox.Name = "friendTextBox";
-            this.friendTextBox.Size = new System.Drawing.Size(163, 20);
+            this.friendTextBox.Size = new System.Drawing.Size(163, 26);
             this.friendTextBox.TabIndex = 8;
             // 
             // friendAddButton
             // 
             this.friendAddButton.Enabled = false;
-            this.friendAddButton.Location = new System.Drawing.Point(429, 360);
+            this.friendAddButton.Location = new System.Drawing.Point(429, 361);
             this.friendAddButton.Name = "friendAddButton";
             this.friendAddButton.Size = new System.Drawing.Size(163, 23);
             this.friendAddButton.TabIndex = 9;
@@ -157,11 +163,20 @@
             // 
             // friendsList
             // 
+            this.friendsList.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.friendsList.FormattingEnabled = true;
+            this.friendsList.ItemHeight = 20;
             this.friendsList.Location = new System.Drawing.Point(429, 15);
             this.friendsList.Name = "friendsList";
-            this.friendsList.Size = new System.Drawing.Size(163, 303);
+            this.friendsList.Size = new System.Drawing.Size(163, 284);
             this.friendsList.TabIndex = 10;
+            this.friendsList.SelectedIndexChanged += new System.EventHandler(this.friendsList_SelectedIndexChanged);
+            // 
+            // notice
+            // 
+            this.notice.Icon = ((System.Drawing.Icon)(resources.GetObject("notice.Icon")));
+            this.notice.Text = "Messenger";
+            this.notice.Visible = true;
             // 
             // Form1
             // 
@@ -181,6 +196,7 @@
             this.Controls.Add(this.loginButton);
             this.Controls.Add(this.nameTextBox);
             this.Controls.Add(this.nameLabel);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Messenger";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_Closing);
@@ -204,6 +220,7 @@
         private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.Button registerButton;
         private System.Windows.Forms.ListBox friendsList;
+        private System.Windows.Forms.NotifyIcon notice;
     }
 }
 

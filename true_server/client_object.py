@@ -23,7 +23,6 @@ class ClientObject:
         self.client.close()
 
     def process(self):
-        print("process alive")
         self.recive()
 
     def recive(self):
@@ -36,7 +35,6 @@ class ClientObject:
                 try:
                     while True:
                         recived = self.client.recv(64)
-                        print(recived)
                         if not recived:
                             break
                         data += recived
@@ -52,12 +50,12 @@ class ClientObject:
                     command = message[self.__NAME_LEN:self.__NAME_LEN+4]
                     if command=="AUTH":
                         print("Auth request")
-                        username = message[self.__NAME_LEN+4:]
-                        password = username[username.rfind("%"):]
-                        self.username = username[:username.find("%")]
+                        self.username = message[self.__NAME_LEN+4:]
+                        password = self.username[self.username.rfind("%")+1:]
+                        self.username = self.username[:self.username.find("%")]
 
-                        if not self.__PARENT.add_client(username, password, self.send):
-                            raise Exception(username+" Denied")
+                        if not self.__PARENT.add_client(self.username, password, self.send):
+                            raise Exception(self.username+" Denied")
 
                     elif command=="ADD_":
                         name_to = message[self.__NAME_LEN+4:]
@@ -99,7 +97,7 @@ class ClientObject:
     def send(self, sent_from, send_to, message):
         if self.username or sent_from==self.__SERVER:
             if sent_from!=self.__SERVER:
-                data = (sent_from+"^:"+message).encode("unicode_internal")
+                data = (sent_from+"^"+send_to+":"+message).encode("unicode_internal")
             else:
                 data = (sent_from + message).encode("unicode_internal")
             if len(data) < 64:
