@@ -8,7 +8,7 @@ from DBcontroller import DBcontroller
 class Server:
     __port = 8010
     __clients = {}
-    __listener = socket.socket()
+    __listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     __DBcontr = DBcontroller("main", "localhost", "root", "")
 

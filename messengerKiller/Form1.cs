@@ -15,7 +15,9 @@ namespace messengerKiller
         const int NAME_LEN = 32;
 
         const int PORT = 8010;
-        const string address = "127.0.0.1"; // TODO: debug
+        //const string address = "127.0.0.1"; // TODO: debug
+
+        const string address = "80.253.235.36";
 
         TcpClient client = null;
         NetworkStream stream = null;
