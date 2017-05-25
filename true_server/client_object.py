@@ -49,7 +49,7 @@ class ClientObject:
                 if send_to==self.__SERVER:
                     command = message[self.__NAME_LEN:self.__NAME_LEN+4]
                     if command=="AUTH":
-                        print("Auth request")
+                        self.__PARENT.log("Auth request")
                         self.username = message[self.__NAME_LEN+4:]
                         password = self.username[self.username.rfind("%")+1:]
                         self.username = self.username[:self.username.find("%")]
@@ -84,7 +84,7 @@ class ClientObject:
 
         except Exception as ex:
             self.client.close()
-            print(ex)
+            self.__PARENT.log(ex)
             return
 
         finally:

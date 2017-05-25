@@ -1,5 +1,7 @@
 import socket
 import threading
+import datetime
+import sys
 
 from client_object import ClientObject
 from DBcontroller import DBcontroller
@@ -18,10 +20,18 @@ class Server:
         try:
             self.__listener.bind(('', self.__port))
 
-            print("Alive")
-            print("CTRL+C to exit")
+            self.log("Alive")
 
-            while True:
+            self.reciver = threading.Thread(target=self.recive)
+            self.reciver.daemon=True
+            self.reciver.start()
+            self.commands_handler()
+        except KeyboardInterrupt:
+            # clear everything
+            sys.exit(0)
+
+    def recive(self):
+        while True:
                 self.__listener.listen(1)
                 client, addr = self.__listener.accept()
                 client_object = ClientObject(client,self)
@@ -29,12 +39,8 @@ class Server:
                 client_object.on_recived = self.message_recived
 
                 _thread = threading.Thread(target=client_object.process)
+                _thread.daemon = True
                 _thread.start()
-        except KeyboardInterrupt:
-            # clear everything
-            exit(0)
-        except:
-            raise
 
     def message_recived(self, sent_from, send_to, message):
         """sent_form: str, send_to: str, message: str   -> None"""
@@ -68,7 +74,7 @@ class Server:
         self.__LOCK.acquire()
         if not username in self.__clients.keys():
             self.__clients[username] = send_func
-            print(username+" Connected")
+            self.log(username+" Connected")
         else:
             self.remove_client(username)
             self.add_client(username,password_hash,send_func)
@@ -80,6 +86,35 @@ class Server:
         """username: str    -> None"""
         if username in self.__clients.keys():
             self.__clients.pop(username)
+
+    def log(self, text):
+        if text == "Alive":
+            text = '\n['+str(datetime.datetime.now())+'] '+text
+        else:
+            text = '['+str(datetime.datetime.now())+'] '+text
+        print(text)
+        
+        self.__LOCK.acquire()
+        with open("log.txt",'a') as log_file:
+            log_file.write(text+"\n")
+        self.__LOCK.release()
+
+    def commands_handler(self):
+        commands = {"exit":self.exit}
+        while True:
+            command = input()
+            if not command in commands.keys():
+                print("----Wrong command! Try one of this:")
+                for com in commands.keys():
+                    print("---- "+com)
+            else:
+                commands[command]()
+
+    def exit(self):
+        print("exiting")
+        raise SystemExit
+        self.reciver.join(timeout=1)
+        sys.exit()
 
 if __name__=="__main__":
     # serv = Server()
