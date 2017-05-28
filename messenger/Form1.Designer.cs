@@ -1,4 +1,4 @@
-﻿namespace messengerKiller
+﻿namespace messenger
 {
     partial class Form1
     {

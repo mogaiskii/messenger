@@ -7,8 +7,8 @@
     <ProjectGuid>{A4739A89-64DA-443D-81EC-6E225C125319}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>messengerKiller</RootNamespace>
-    <AssemblyName>messengerKiller</AssemblyName>
+    <RootNamespace>messenger</RootNamespace>
+    <AssemblyName>messenger</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

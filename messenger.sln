@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "messengerKiller", "messengerKiller\messengerKiller.csproj", "{A4739A89-64DA-443D-81EC-6E225C125319}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "messenger", "messenger\messenger.csproj", "{A4739A89-64DA-443D-81EC-6E225C125319}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

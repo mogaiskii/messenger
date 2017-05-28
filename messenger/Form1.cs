@@ -8,16 +8,16 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
-namespace messengerKiller
+namespace messenger
 {
     public partial class Form1 : Form
     {
         const int NAME_LEN = 32;
 
         const int PORT = 8010;
-        const string address = "127.0.0.1"; // TODO: debug
+        // TODO: YOUR IP HERE
+        const string address = "127.0.0.1"; 
 
-        //const string address = "80.253.235.36";
 
         TcpClient client = null;
         NetworkStream stream = null;

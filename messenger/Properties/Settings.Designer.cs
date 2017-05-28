@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace messengerKiller.Properties
+namespace messenger.Properties
 {
 
 
